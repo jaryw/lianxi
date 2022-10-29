@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <style>
+      li {
+        list-style: none;
+      }
+
+      a {
+        text-decoration: none;
+        /* color: black; */
+      }
+
+      .prevent {
+        /* width: 70px; */
+        height: 90px;
+        background-color: pink;
+      }
+
+      .prevent > ul {
+        line-height: 30px;
+      }
+      .basic {
+        width: 400px;
+        height: 100px;
+        border: 1px solid black;
+      }
+
+      .happy {
+        border: 4px solid red;
+        background-color: rgba(255, 255, 0, 0.644);
+        background: linear-gradient(30deg, yellow, pink, orange, yellow);
+      }
+      .sad {
+        border: 4px dashed rgb(2, 197, 2);
+        background-color: gray;
+      }
+      .normal {
+        background-color: skyblue;
+      }
+      .atguigu1 {
+        background-color: yellowgreen;
+      }
+      .atguigu2 {
+        font-size: 30px;
+        text-shadow: 2px 2px 10px red;
+      }
+      .atguigu3 {
+        border-radius: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root">
+      <!-- 动态绑定class样式 -->
+      <div class="basic" :class="mood" @click="changeStyle">{{name}}</div>
+      <br /><br />
+      <!-- 数组写法  绑定样式的个数、名字都不确定的情况-->
+      <div class="basic" :class="classArr">{{name}}</div>
+      <!-- 数组对象写法 样式的个数、名字已知；动态判断用不用  这个例子很简单 就直接取网页调true 或者flase-->
+      <div class="basic" :class="classObj">{{name}}</div>
+      <!-- 绑定style样式 对象写法 -->
+      <!-- 比较少，但是在data里面写样式的时候，样式标签是要遵循HTML5里面的规范，且单词一定不要写错，小驼峰命名-->
+      <div class="basic" :style="styleObj">{{name}}</div>
+      <!-- 绑定style样式 数组写法 -->
+      <!--数组里面写对象，对象里面加样式。 应该都会用的比较少。-->
+      <div class="basic" :style="styleArr">{{name}}</div>
+
+      <!--     <div>
+        <h2>今天的天气很{{weather}}</h2>
+        <button @click="changeWeather">点击切换天气</button>
+      </div> -->
+
+      <!--    姓：<input type="text" v-model="firstName"><br>
+            名：<input type="text" v-model="lastName"><br>
+            名字是：<input type="text" v-model="fullName"> -->
+      <div>
+        <!-- methods时 如果只是输入fullName 返回的就只是一个函数；一个错误点 -->
+        <!-- 名字是：{{fullName()}} -->
+        <!-- 计算属性下 就需要返回的是一个函数fullName -->
+        <!-- 键盘事件 -->
+        <!-- <h2>今天是星期{{number}}</h2> -->
+        <!-- keyCode 13 -->
+        <!-- <input type="text" placeholder="按下回车输入内容" @keydown.13="demo"> -->
+        <!-- <input type="text" placeholder="按下回车输入内容" @keydown.enter="demo"> -->
+        <!-- keydown keyup两者执行ctL///  前者理解出效果，后者要松开之后 -->
+        <!-- <input type="text" placeholder="按下回车输入内容" @keydown.ctrl="demo"> -->
+        <!-- <input type="text" placeholder="按下回车输入内容" @keyup.ctrl="demo"> -->
+        <!-- <input type="text" placeholder="按下回车输入内容" @keyup.ctrl.x="demo"> -->
+        <!-- <input type="text" placeholder="自定义按键回车" @keydown.huiche="demo"> -->
+      </div>
+
+      <!-- 在点击事件被嵌套进了一个盒子中的时候，要触发once事件就只有在其父盒子上 -->
+      <!-- <div class="prevent" @click.once="demo"> 只有click是不行的，涉及桥套
+            <ul>
+                <li>接下来是<a href="http://www.baidu.com" @click.prevent="demo">阻止默认事件</a></li>
+                <li>接下来是<a href="http://www.baidu.com" @click.stop.prevent="demo">阻止默认事件</a></li>
+                <li><button @click.once.stop="showInfo">阻止点击弹窗</button></li>
+            </ul>
+            <button @click.once="showInfo">只提示一次信息</button>
+        </div> -->
+      <!-- <div>
+            天气(单项): <input type="text" :value="weather">
+            日期(双项): <input type="text" v-model="date">
+        </div> -->
+    </div>
+  </body>
+
+  <script>
+    // 自定义键盘按键别名
+    Vue.config.keyCodes.huiche = 13;
+
+    new Vue({
+      el: "#root",
+      data: {
+        name: "今天星期六",
+        mood: "normal",
+        classArr: ["auguigu1", "atguigu2", "atguigu3"],
+        classObj: {
+          happy: true,
+          san: false,
+        },
+        styleObj: {
+          fontSize: "25px",
+          color: "red",
+          backgroundColor: "pink",
+        },
+        styleArr: [
+          {
+            backgroundColor:'gray'
+          },
+          {
+            color:'black'
+          }
+        ],
+        // isHot: true,
+        /*      firstName: "萧",
+        lastName: "炎", */
+        // number: '五'
+        // name:'深夜'
+        // weather:'yintian',
+        // date:'27号'
+      },
+
+      methods: {
+        changeStyle() {
+          // 把class点击样式做到切换的效果 把多个样式收纳到一个数组当中去
+          const arr = ["happy", "sad", "normal"];
+          // 向下取整 向上取整是Math.ceil。
+          const index = Math.floor(Math.random() * 3);
+          this.mood = arr[index];
+        },
+        /*   changeWeather() {
+          this.isHot = !this.isHot;
+        }, */
+        // fullName(){
+        //     // this.firstName + "-" + this.lastName
+        //     // 返回的是一个值
+        //     return this.firstName + '-' + this.lastName
+        //     console.log('fullName')
+        // }
+        // demo() {
+        //     alert('阻止')
+        // },
+        // showInfo() {
+        //     alert('夜深了')
+        // }
+      },
+      computed: {
+        weather() {
+          // 这个小案例的关键就是用了 一个三元表达式加
+          //   return this.isHot ? "炎热" : "寒冷";
+        },
+        // 完整写法
+        /*   fullName:{
+                get(){
+                    return this.firstName + '-' + this.lastName
+                },
+                set(value){
+                    const add = vaule.split('-')
+                    this.firstName = add[0]
+                    this.lastName = add[1]
+                }
+            } */
+        // 简写：
+        // fullName(){
+        //     return this.firstName + '-' + this.lastName
+        // }
+      },
+      watch: {
+        isHot: {
+          // immediate:true,
+          /*     handler(isHot) {
+            console.log("isHot被修改了");
+            alert("已经被调用了");
+          }, */
+        },
+      },
+      // 探究render 跟精简Vue 之间的写法关系
+      // render(createElement) {
+      //     return createElement('h1','你好')
+      // },
+      // 因为没有牵涉this的使用，就直接写成箭头函数
+      // render:(createElement)=>{
+      //     return createElement('h1','你好')
+      // }
+      // render:(q)=> q(vue)
+    });
+    // 监视属性的第二种写法
+    /* vm.$watch("isHot", {
+      handler(val) {
+        console.log("isHot被修改了");
+        alert("已经被调用了");
+      },
+    }); */
+  </script>
+</html>
